@@ -1,0 +1,12 @@
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp
+--output-path=obj\Any CPU\Release\netcoreapp2.0\
+--application-name=BotPOSWebApp
+--content-root=C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp
+--file=C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\Views\Home\About.cshtml
+--file=C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\Views\Home\Contact.cshtml
+--file=C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\Views\Home\Index.cshtml
+--file=C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\Views\Shared\Error.cshtml
+--file=C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\Views\Shared\_Layout.cshtml
+--file=C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\Views\Shared\_ValidationScriptsPartial.cshtml
+--file=C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\Views\_ViewImports.cshtml
+--file=C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\Views\_ViewStart.cshtml

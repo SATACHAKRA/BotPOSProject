@@ -1,0 +1,223 @@
+﻿<!--
+  This is a sample HTML file which shows how to use speech in the Web Chat control.
+  1. Start a web server. One way to do so is to use npm http-server at a Node.js command prompt.
+       * To install http-server globally so it can be run from the command line, run this command:
+             npm install http-server- -g
+       * To start a web server using port 8000, from the directory that contains this file, run this command:
+             http-server -p 8000
+  2. Open this file by pointing your browser at "http://localhost:8000/index.html?[parameters as listed below]"
+  For ease of testing, several parameters can be set in the query string:
+
+    * s = Direct Line secret, or
+    * t = Direct Line token (obtained by calling Direct Line's Generate Token)
+    * domain = optionally, the URL of an alternate Direct Line endpoint
+    * webSocket = set to 'true' to use WebSocket to receive messages (currently defaults to false)
+    * userid, username = id (and optionally name) of bot user
+    * botid, botname = id (and optionally name) of bot
+  For example, if the Direct Line secret for your bot is xxxMySecret.xxx, then open the following URL in your browser
+  http://localhost:8000/index.html?s=xxxMySecret.xxx
+  You have a few options to choose from for speech recognition. See definition of speechOptions in the following code,
+  and uncomment the option you want to choose.
+
+  For more information on how to use the Web Chat control with speech recognition, see https://docs.microsoft.com/en-us/bot-framework/channel-connect-webchat-speech
+-->
+
+<link href="https://cdn.botframework.com/botframework-webchat/latest/botchat.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    /* .example {
+              float: left;
+              margin-right: 20px;
+              width: 300px;
+            } */
+    .example > h2 {
+        font-family: 'Segoe UI';
+    }
+
+    #BotChatGoesHere {
+        border: 1px solid #333;
+        float: left;
+        height: 600px;
+        /*position: relative;*/
+        /*width: 960px; */
+        width: 100%;
+        /*height: 90%;*/
+        margin-top: 0px;
+        background-color: white;
+    }
+
+    body {
+        background-color: #bebdff;
+        height: 100%;
+    }
+
+    html {
+        height: 100%;
+    }
+
+    .full-height {
+        height: 100%;
+    }
+
+    .save-btn {
+        width: 100%;
+        margin-top: 20px;
+    }
+</style>
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="~/js/botchat.js"></script>
+<script src="~/js/CognitiveServices.js"></script>
+
+
+
+<div class="container-fluid full-height">
+    <div class="row full-height">
+        <div class="col-md-offset-3 col-md-6 full-height">
+            <div id="BotChatGoesHere"></div>
+
+        </div>
+        <div class="col-md-3" id="forAdminOnly" style="visibility:hidden">
+            <h3>Options:</h3>
+            <div>
+                <h5>volume:</h5>
+                <input id="volume" type="number" class="form-control">
+            </div>
+            <div>
+                <h5>rate:</h5>
+                <input id="rate" type="number" class="form-control">
+            </div>
+            <div>
+                <h5>pitch:</h5>
+                <input id="pitch" type="number" class="form-control">
+            </div>
+            <div>
+                <h5>voice:</h5>
+                <select id="voice" class="form-control"></select>
+            </div>
+            <button onclick="changeOptions()" class="btn btn-success save-btn">Change</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const params = BotChat.queryParams(location.search);
+    const user = {
+        id: params['userid'] || 'userid',
+        name: params['username'] || 'username'
+    };
+    const bot = {
+        id: params['botid'] || 'botid',
+        name: params['botname'] || 'botname'
+    };
+
+    console.log(user.name)
+    window.botchatDebug = params['debug'] && params['debug'] === 'true';
+    // // Option 1: No speech
+    //
+    // const speechOptions = null;
+    // // Option 2: Native browser speech (not supported by all browsers, no speech recognition priming support)
+    //
+    // Note that Chrome automatically blocks speech if the HTML file is loaded from disk. You can run a server locally
+    // or launch Chrome (close all the existing Chrome browsers) with the following option:
+    // chrome.exe --allow-file-access-from-files <sampleHtmlFile>
+    //
+    //const speechOptions = {
+    //speechRecognizer: new BotChat.Speech.BrowserSpeechRecognizer(),
+    //speechSynthesizer: new BotChat.Speech.BrowserSpeechSynthesizer()
+    //};
+    // // Option 3: Cognitive Services speech recognition using API key (cross browser, speech priming support)
+    //
+    /*
+    const speechOptions = {
+      speechRecognizer: new CognitiveServices.SpeechRecognizer({ subscriptionKey: 'YOUR_COGNITIVE_SPEECH_API_KEY' }),
+      speechSynthesizer: new CognitiveServices.SpeechSynthesizer({
+        gender: CognitiveServices.SynthesisGender.Female,
+        subscriptionKey: 'YOUR_COGNITIVE_SPEECH_API_KEY',
+        voiceName: 'Microsoft Server Speech Text to Speech Voice (en-US, JessaRUS)'
+      })
+    };
+    */
+    //
+    // // Option 4: Cognitive Services speech recognition using a token (usually generated in a secure backend using your API key)
+    //
+    function getToken() {
+        // Normally this token fetch is done from your secured backend to avoid exposing the API key and this call
+        // would be to your backend, or to retrieve a token that was served as part of the original page.
+        return fetch(
+            'https://api.cognitive.microsoft.com/sts/v1.0/issueToken',
+            {
+                headers: {
+                    'Ocp-Apim-Subscription-Key': "5d2d24e195a143318b5c71f0e05d9c40"
+                },
+                method: 'POST'
+            }
+        ).then(res => res.text());
+    }
+    const speechOptions = {
+        speechRecognizer: new CognitiveServices.SpeechRecognizer({
+            fetchCallback: (authFetchEventId) => getToken(),
+            fetchOnExpiryCallback: (authFetchEventId) => getToken()
+        }),
+        speechSynthesizer: new BotChat.Speech.BrowserSpeechSynthesizer()
+    };
+    // // Option 5: Your own custom implementations of ISpeechRecognizer and ISpeechSynthesizer
+    //
+    // const speechOptions = {
+    //   speechRecognizer: new YourOwnSpeechRecognizer(),
+    //   speechSynthesizer: new YourOwnSpeechSynthesizer()
+    // };
+    BotChat.App({
+        bot: bot,
+        locale: params['locale'],
+        resize: 'detect',
+        sendTyping: true,    // defaults to false. set to true to send 'typing' activities to bot (and other users) when user is typing
+        speechOptions: speechOptions,
+        user: user,
+        directLine: { secret: "r6oOGZw1pMg.cwA.MX8.XyHDVH-BRzlhlXsZZYVSHmnQb0k9zPwPjP7ai4J1DgU" },
+    }, document.getElementById('BotChatGoesHere'));
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementsByClassName('wc-header')[0].getElementsByTagName('span')[0].innerHTML = "Hey, I am your virtual assistant";
+        //document.getElementById('BotChatGoesHere').style.height = (window.innerHeight-10)+'px';
+        //speechOptions.speechSynthesizer.setOptions(options);
+    });
+
+    var helpers = {
+        buildDropdown: function (result, dropdown, emptyMessage) {
+            // Remove current options
+            dropdown.html('');
+            // Add the empty option with the empty message
+            dropdown.append('<option value="">' + emptyMessage + '</option>');
+            // Check result isnt empty
+            if (result != '') {
+                // Loop through each of the results and append the option to the dropdown
+                $.each(result, function (k, v) {
+                    dropdown.append('<option value="' + v.voiceURI + '">' + v.name + '</option>');
+                });
+            }
+        }
+    }
+    var availableVoices;
+    window.speechSynthesis.onvoiceschanged = function () {
+        const windowSpeechSynthesizer = window.speechSynthesis;
+        availableVoices = windowSpeechSynthesizer.getVoices();
+        if (user.name == 'admin') {
+            helpers.buildDropdown(availableVoices, $('#voice'), 'Select an option');
+            $("#forAdminOnly").css("visibility", "visible");
+        }
+        else {
+            $("#forAdminOnly").remove();
+            var options = JSON.parse(localStorage.getItem('options'));
+            if (options != null)
+                options.voice = availableVoices.filter(a => a.voiceURI === options.voice)[0]
+            speechOptions.speechSynthesizer.setOptions(options);
+        }
+    }
+    function changeOptions() {
+        var opt = { "volume": $('#volume').val(), rate: $('#rate').val(), pitch: $('#pitch').val(), voice: availableVoices.filter(a => a.voiceURI === $('#voice').val())[0] };
+        speechOptions.speechSynthesizer.setOptions(opt);
+        var optForLocalStorage = { "volume": $('#volume').val(), rate: $('#rate').val(), pitch: $('#pitch').val(), voice: $('#voice').val() };
+        localStorage.setItem('options', JSON.stringify(optForLocalStorage));
+    }
+</script>
+
+

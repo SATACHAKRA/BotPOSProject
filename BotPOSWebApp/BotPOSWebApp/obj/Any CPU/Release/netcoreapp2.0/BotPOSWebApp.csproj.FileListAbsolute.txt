@@ -1,0 +1,11 @@
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\bin\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.deps.json
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\bin\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.runtimeconfig.json
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\bin\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.runtimeconfig.dev.json
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\bin\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.dll
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\bin\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.pdb
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\obj\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.csprojResolveAssemblyReference.cache
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\obj\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.csproj.CoreCompileInputs.cache
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\obj\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.AssemblyInfoInputs.cache
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\obj\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.AssemblyInfo.cs
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\obj\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.dll
+C:\Users\VikasSinha\source\repos\BotPOSWebApp\BotPOSWebApp\obj\Any CPU\Release\netcoreapp2.0\BotPOSWebApp.pdb
